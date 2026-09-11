@@ -4,15 +4,17 @@ using System.Collections.Generic;
 public class Program {
    	public static void Main() {
 		Deck deck = new Deck();
+		Player player = new Player();
 		
 		Card drawnCard = deck.DrawCard();
 		
-		Console.WriteLine(drawnCard);
-		Console.WriteLine(deck.Cards.Count);
+		player.Name = "JJ"; 
+		player.Hand.Add(drawnCard);
+		
+		Console.WriteLine(player);
 	}
 }
 
-// Used in deck class to build the deck of cards
 public class Card {
 	public string Suit { get; set; }
 	public string Rank { get; set; }
@@ -23,11 +25,10 @@ public class Card {
 	}
 	
 	public override string ToString() {
-		return $"Suit: {Suit}\nRank: {Rank}";	
+		return $"{Rank} of {Suit}";	
 	}
 }
 
-// Uses card class to build the deck of cards
 public class Deck {
 	public List<Card> Cards { get; set; } = new();
 	
@@ -51,7 +52,6 @@ public class Deck {
 			"8",
 			"9",
 			"10",
-
 			/* Leaving out all the face cards for now as the functionality for them in caravan is more complex than the others
 			"Jack",
 			"Queen",
@@ -68,7 +68,6 @@ public class Deck {
 		}
 	}
 	
-    // draws a card for use in the player's hand, and removes it from their deck
 	public Card DrawCard() {
 	Card card = Cards[0];
 	
@@ -79,5 +78,14 @@ public class Deck {
 	
 	public override string ToString() {
 		return $"Cards: {Cards}";	
+	}
+}
+
+public class Player {
+	public string Name { get; set; }
+	public List<Card> Hand { get; set; } = new();
+	
+	public override string ToString() {
+		return $"Name: {Name}\nHand: {string.Join(", ", Hand)}";
 	}
 }
