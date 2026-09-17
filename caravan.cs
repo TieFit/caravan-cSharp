@@ -9,22 +9,42 @@ public class Program
 		Computer computer = new Computer();
 		
 		CreatePlayerDeck(player);
-		player.CaravanDeck.Sort((a, b) => a.Value.CompareTo(b.Value));
+		player.CaravanDeck.Sort((a, b) => a.SortValue.CompareTo(b.SortValue));
 		
 		CreateComputerDeck(computer);
-		computer.CaravanDeck.Sort((a, b) => a.Value.CompareTo(b.Value));
+		computer.CaravanDeck.Sort((a, b) => a.SortValue.CompareTo(b.SortValue));
 		
 		CreatePlayerHand(player);
-		player.Hand.Sort((a, b) => a.Value.CompareTo(b.Value));
+		player.Hand.Sort((a, b) => a.SortValue.CompareTo(b.SortValue));
 		
 		CreateComputerHand(computer);
-		computer.Hand.Sort((a, b) => a.Value.CompareTo(b.Value));
+		computer.Hand.Sort((a, b) => a.SortValue.CompareTo(b.SortValue));
 
 		player.Name = "Pwayer";
 		computer.Name = "Bee-Boop";
 	
 		Console.WriteLine(player);
 		Console.WriteLine(computer);
+		
+		// for displaying caravans
+		for (int i = 0; i < player.Caravans.Count; i++)
+		{
+			Console.WriteLine($"Caravan {i + 1}");
+			Console.WriteLine(player.Caravans[i]);
+		}
+		
+		// display player hand
+		for (int i = 0; i < player.Hand.Count; i++)
+		{
+			Console.WriteLine($"{i}: {player.Hand[i]}");
+		}
+		
+		AddCardToCaravan(player);
+		
+		foreach (Caravan caravan in player.Caravans)
+		{
+			Console.WriteLine(caravan);	
+		}
 	}
 	
 	public static void CreatePlayerDeck(Player player) 
@@ -78,6 +98,19 @@ public class Program
 			computer.CaravanDeck.RemoveAt(randomIndex);
 		}
 	}
+	
+	public static void AddCardToCaravan(Player player)
+	{
+		Console.Write("Choose a card: ");
+		int cardChoice = int.Parse(Console.ReadLine());
+		Card selectedCard = player.Hand[cardChoice];
+		
+		Console.Write("Choose a caravan, 1-3: ");
+		int caravanChoice = int.Parse(Console.ReadLine());
+		
+		player.Caravans[caravanChoice - 1].Cards.Add(selectedCard);
+		player.Hand.RemoveAt(cardChoice);
+	}
 }
 
 public class Card
@@ -92,7 +125,32 @@ public class Card
 	}
 	
 	// this value is mainly for sorting CaravanDeck and Hands in order right now
-	public int Value
+	public int SortValue
+	{
+    	get
+    	{
+        	return Rank switch
+        	{
+				"Ace" => 1,
+				"2" => 2,
+				"3" => 3,
+				"4" => 4,
+				"5" => 5,
+				"6" => 6,
+				"7" => 7,
+				"8" => 8,
+				"9" => 9,
+				"10" => 10,
+				"Jack" => 11,
+				"Queen" => 12,
+				"King" => 13,
+				"Joker" => 14,
+				_ => 0
+        	};
+    	}
+	}
+	
+	public int NumericValue
 	{
     	get
     	{
@@ -198,11 +256,45 @@ public class Deck
 	}
 }
 
+public class Caravan
+{
+	public List<Card> Cards { get; set; } = new();
+	public string Direction { get; set; }
+	
+	public int Value 
+	{
+		get
+		{
+			int total = 0;
+			
+			foreach (Card card in Cards)
+			{
+				if (card.NumericValue <= 10)
+				{
+					total += card.NumericValue;	
+				}
+			}
+			return total;
+		}
+	}
+	public override string ToString()
+	{
+		return $"Value: {Value}\n	{string.Join("\n	", Cards)}";	
+	}
+}
+
 public class Player
 {
 	public string Name { get; set; }
 	public List<Card> CaravanDeck { get; set; } = new();
 	public List<Card> Hand { get; set; } = new();
+	
+	public List<Caravan> Caravans { get; set; } = new()
+	{
+		new Caravan(),
+		new Caravan(),
+		new Caravan()
+	};
 
 	public override string ToString()
 	{
