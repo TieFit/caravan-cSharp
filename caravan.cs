@@ -204,11 +204,6 @@ public class Player
 	public List<Card> CaravanDeck { get; set; } = new();
 	public List<Card> Hand { get; set; } = new();
 
-	public void AddToCaravanDeck(Card card)
-	{
-		CaravanDeck.Add(card);
-	}
-
 	public override string ToString()
 	{
 		return $"\nName: {Name}\nDeck:\n	{string.Join("\n	", CaravanDeck)}\nHand:\n	{string.Join("\n	", Hand)}";
