@@ -208,11 +208,6 @@ public class Player
 	{
 		CaravanDeck.Add(card);
 	}
-	
-	public void PlayerDrawHand(Card card) 
-	{
-		Hand.Add(card);
-	}
 
 	public override string ToString()
 	{
@@ -220,24 +215,4 @@ public class Player
 	}
 }
 
-public class Computer 
-{
-	public string Name { get; set; }
-	public List<Card> CaravanDeck { get; set; } = new();
-	public List<Card> Hand { get; set; } = new();
-	
-	public void AddToCaravanDeck(Card card)
-	{
-		CaravanDeck.Add(card);
-	}
-	
-	public void ComputerDrawHand(Card card) 
-	{
-		Hand.Add(card);	
-	}
-	
-	public override string ToString() 
-	{
-		return $"\nName: {Name}\nDeck:\n	{string.Join("\n	", CaravanDeck)}\nHand:\n	{string.Join("\n	", Hand)}";
-	}
-}
+public class Computer : Player {}
