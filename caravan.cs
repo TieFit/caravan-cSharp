@@ -6,15 +6,25 @@ public class Program
 	public static void Main()
 	{
 		Player player = new Player();
+		Computer computer = new Computer();
 		
 		CreatePlayerDeck(player);
 		player.CaravanDeck.Sort((a, b) => a.Value.CompareTo(b.Value));
 		
+		CreateComputerDeck(computer);
+		computer.CaravanDeck.Sort((a, b) => a.Value.CompareTo(b.Value));
+		
 		CreatePlayerHand(player);
 		player.Hand.Sort((a, b) => a.Value.CompareTo(b.Value));
+		
+		CreateComputerHand(computer);
+		computer.Hand.Sort((a, b) => a.Value.CompareTo(b.Value));
 
-		player.Name = "JJ";
+		player.Name = "Pwayer";
+		computer.Name = "Bee-Boop";
+	
 		Console.WriteLine(player);
+		Console.WriteLine(computer);
 	}
 	
 	public static void CreatePlayerDeck(Player player) 
@@ -31,6 +41,20 @@ public class Program
 		}		
 	}
 	
+	
+	public static void CreateComputerDeck(Computer computer)
+	{
+		Deck deck = new Deck();
+		while (computer.CaravanDeck.Count < 5)
+		{
+			Card card = deck.ComputerDrawCard();
+			if (card != null) 
+			{
+				computer.CaravanDeck.Add(card);	
+			}
+		}
+	}
+	
 	public static void CreatePlayerHand(Player player) 
 	{
 		while (player.Hand.Count < 3)
@@ -41,6 +65,18 @@ public class Program
 			player.Hand.Add(card);	
 			player.CaravanDeck.RemoveAt(randomIndex);
 		}	
+	}
+	
+	public static void CreateComputerHand(Computer computer)
+	{
+		while (computer.Hand.Count < 3)
+		{
+			int randomIndex = Random.Shared.Next(computer.CaravanDeck.Count);
+			Card card = computer.CaravanDeck[randomIndex];
+			
+			computer.Hand.Add(card);
+			computer.CaravanDeck.RemoveAt(randomIndex);
+		}
 	}
 }
 
@@ -179,6 +215,28 @@ public class Player
 	}
 
 	public override string ToString()
+	{
+		return $"\nName: {Name}\nDeck:\n	{string.Join("\n	", CaravanDeck)}\nHand:\n	{string.Join("\n	", Hand)}";
+	}
+}
+
+public class Computer 
+{
+	public string Name { get; set; }
+	public List<Card> CaravanDeck { get; set; } = new();
+	public List<Card> Hand { get; set; } = new();
+	
+	public void AddToCaravanDeck(Card card)
+	{
+		CaravanDeck.Add(card);
+	}
+	
+	public void ComputerDrawHand(Card card) 
+	{
+		Hand.Add(card);	
+	}
+	
+	public override string ToString() 
 	{
 		return $"\nName: {Name}\nDeck:\n	{string.Join("\n	", CaravanDeck)}\nHand:\n	{string.Join("\n	", Hand)}";
 	}
